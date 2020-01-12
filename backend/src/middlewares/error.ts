@@ -50,6 +50,8 @@ const manageMongooseErr = (
       ? "a username"
       : err.message.includes("email")
       ? "an email"
+      : err.message.includes("title")
+      ? "a title"
       : "a record";
 
     title = "Duplicate data";
@@ -61,7 +63,7 @@ const manageMongooseErr = (
   if (err.name === "CastError") {
     thereIsAnError = true;
     title = "Data not found";
-    msg = `Unable to find ${err['value']}.`;
+    msg = `Unable to find ${err["value"]}.`;
     error = new ErrorResponse(title, msg, 404);
   }
 
@@ -89,7 +91,7 @@ const manageAuthErr = (
   }
 
   // @ts-ignore
-  if ( req.body.password && req.body.passwordConfirmation && req.body.password.length < 4
+  if (req.body.password && req.body.passwordConfirmation && req.body.password.length < 4
   ) {
     err = true;
     title = "The password is too short";
@@ -101,10 +103,12 @@ const manageAuthErr = (
 };
 
 const sendError = (res: Response, error: Error) => {
-    // @ts-ignore
+  // @ts-ignore
   return res.status(error.statusCode || 500).json({
     success: false,
-    title: error['title'],
+    title: error["title"],
     message: error.message || "Server Error"
   });
 };
+
+export default errorHandler;

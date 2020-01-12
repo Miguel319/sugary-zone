@@ -1,4 +1,3 @@
-// import { Schema, model } from "mongoose";
 import mongoose from "mongoose";
 
 // @ts-ignore
