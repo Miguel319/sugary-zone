@@ -1,9 +1,10 @@
 import app from "./app";
+import connectDb from "./db/db";
 
 const main = async () => {
-  await app.listen(4000);
-  console.log('Listening')
+  await connectDb();
+  await app.listen(app.get("port"));
+  console.log("Listening");
 };
-
 
 main();
