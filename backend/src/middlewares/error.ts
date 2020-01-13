@@ -15,7 +15,7 @@ const errorHandler = (err: Error, req: Request, res: Response, next: any) => {
   ) {
     manageMongooseErr(req, res, title, msg, error, err);
   } else {
-    manageAuthErr(req, res, title, msg, error);
+     manageAuthErr(req, res, title, msg, error);
   }
 };
 
@@ -83,21 +83,40 @@ const manageAuthErr = (
   let err = false;
 
   // @ts-ignore
-  if (req.body.username && req.body.username.length < 4) {
+  if (req.body.username && req.body.username.length < 3) {
     err = true;
     title = "Username is too short";
-    msg = "The username must be at least 4 characters long.";
+    msg = "The username must be at least 3 characters long.";
     error = new ErrorResponse(title, msg, 400);
   }
 
   // @ts-ignore
-  if (req.body.password && req.body.passwordConfirmation && req.body.password.length < 4
+  if (req.body.username && req.body.username.length > 15) {
+    err = true;
+    title = "Username is too short";
+    msg = "The username can't have more than 15 characters.";
+    error = new ErrorResponse(title, msg, 400);
+  }
+
+  // @ts-ignore
+  if (req.body.password && req.body.passwordConfirmation && req.body.password.length < 5
   ) {
     err = true;
     title = "The password is too short";
-    msg = "The password must be at least 4 characters long.";
+    msg = "The password must be at least 5 characters long.";
     error = new ErrorResponse(title, msg, 400);
   }
+
+  // @ts-ignore
+  if (req.body.password && req.body.passwordConfirmation && req.body.password.length > 25
+  ) {
+    err = true;
+    title = "The password is too short";
+    msg = "The password can't have more than 25 characters.";
+    error = new ErrorResponse(title, msg, 400);
+  }
+
+  if (!err) return;
 
   return sendError(res, error);
 };
