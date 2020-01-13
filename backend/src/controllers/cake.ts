@@ -1,6 +1,5 @@
 import Cake from "../models/cake";
 import asyncHandler from "../middlewares/asyncHandler";
-import ErrorResponse from "../helpers/errorResponse";
 
 exports.createCake = asyncHandler(
   async (req: Request, res: Response, next: any) => {
