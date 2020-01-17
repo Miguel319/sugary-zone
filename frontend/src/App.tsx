@@ -1,6 +1,7 @@
 import React from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
-import { BrowserRouter as Router, Route} from 'react-router-dom';
+import { BrowserRouter as Router, Route } from "react-router-dom";
 
 import Navbar from "./components/Navbar/Navbar";
 import RecipeList from "./components/Recipe/RecipeList";
@@ -14,11 +15,13 @@ const App: React.FC = () => {
       <Router>
         <Navbar />
 
-        <Route path="/" exact component={RecipeList} />
-        <Route path="/create" component={RecipeCreate} />
-        <Route path="/edit/:id" component={RecipeCreate} />
-        <Route path="/login" component={Login} />
-        <Route path="/register" component={Register} />
+        <div className="container mt-4">
+          <Route path="/" exact component={RecipeList} />
+          <Route path="/create" component={RecipeCreate} />
+          <Route path="/edit/:id" component={RecipeCreate} />
+          <Route path="/login" component={Login} />
+          <Route path="/signup" component={Register} />
+        </div>
       </Router>
     </>
   );
