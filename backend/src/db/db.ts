@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import variables from '../../variables';
 
+// @ts-ignore
 const { MONGODB_URI } = variables;
 
 const connectDb = async () => {

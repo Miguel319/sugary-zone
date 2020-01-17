@@ -10,23 +10,9 @@ exports.signup = asyncHandler(
     // @ts-ignore
     const { username, email, password, passwordConfirmation } = req.body;
 
-    if (!passwordConfirmation) {
-      return sendErrResponse(
-        res,
-        "Confirmation required",
-        "Please confirm the password.",
-        400
-      );
-    }
+    const tempUser = { username, email, password, passwordConfirmation };
 
-    if (passwordConfirmation !== password) {
-      return sendErrResponse(
-        res,
-        "Passwords don't match",
-        "The password must be the same as the confirmation.",
-        400
-      );
-    }
+    manageAuthErr(req, res, passwordConfirmation);
 
     // Create user
     const user = await User.create({
@@ -43,6 +29,80 @@ exports.signup = asyncHandler(
       .json({ success: true, message: "User created successfully!", token });
   }
 );
+
+const manageAuthErr = (
+  req: Request,
+  res: Response,
+  confirmation = null
+) => {
+  // Check the username's length
+  let error: ErrorResponse;
+  let err = false;
+  let title: string;
+  let msg: string;
+
+  if (!confirmation) {
+      err = true;
+      title =   "Confirmation required";
+      msg =  "Please confirm the password.";
+      error = new ErrorResponse(title, msg, 400);
+  }
+
+  // @ts-ignore
+  if (confirmation && confirmation !== req.body.password) {
+    err = true;
+    title = "Passwords don't match";
+    msg = "The password must be the same as the confirmation.";
+    error = new ErrorResponse(title, msg, 400);
+  }
+  // @ts-ignore
+  if (req.body.username && req.body.username.length < 3) {
+      err = true;
+      title = "The username is too short";
+      msg = "The username must have at least 3 characters.";
+      error = new ErrorResponse(title, msg, 400);
+  }
+
+  // @ts-ignore
+  if (req.body.username && req.body.username.length > 15) {
+    err = true;
+    title = "The username is too long";
+    msg = "The username can't have more than 15 characters.";
+    error = new ErrorResponse(title, msg, 400);
+  }
+
+  // @ts-ignore
+  if (req.body.password && req.body.passwordConfirmation && req.body.password.length < 5
+  ) {
+    err = true;
+    title = "The password is too short";
+    msg = "The password must be at least 5 characters long.";
+    error = new ErrorResponse(title, msg, 400);
+  }
+
+  // @ts-ignore
+  if (req.body.password && req.body.passwordConfirmation && req.body.password.length > 25
+  ) {
+    err = true;
+    title = "The password is too short";
+    msg = "The password can't have more than 25 characters.";
+    error = new ErrorResponse(title, msg, 400);
+  }
+
+  // @ts-ignore
+  return res.status(error.statusCode || 500).json({
+    success: false,
+    title: error["title"],
+    message: error.message || "Server Error"
+  });
+};
+
+
+const sendError = (res: Response, error: Error) => {
+  // @ts-ignore
+  
+};
+
 
 exports.signin = asyncHandler(
   async (req: Request, res: Response, next: any) => {
@@ -108,19 +168,4 @@ const sendToken = (user: any, statusCode: number, message: string, res: Response
       message,
       username
     });
-}
-
-
-const sendErrResponse = (
-  res: Response,
-  title: string,
-  message: string,
-  statusCode: number
-) => {
-  // @ts-ignore
-  res.status(statusCode).json({
-    success: false,
-    title,
-    message
-  });
 };
