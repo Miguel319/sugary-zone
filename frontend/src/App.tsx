@@ -19,7 +19,7 @@ const App: React.FC = () => {
           <Route path="/" exact component={RecipeList} />
           <Route path="/create" component={RecipeCreate} />
           <Route path="/edit/:id" component={RecipeCreate} />
-          <Route path="/login" component={Login} />
+          <Route path="/signin" component={Login} />
           <Route path="/signup" component={Register} />
         </div>
       </Router>
