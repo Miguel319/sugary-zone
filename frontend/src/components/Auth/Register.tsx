@@ -20,7 +20,7 @@ const INITIAL_ERROR = {
   passwordConfirmation: ""
 };
 
-export default function Register() {
+const Register: React.FC = () => {
   const [user, setUser] = React.useState(INITIAL_USER);
   const [disabled, setDisabled] = React.useState(true);
   const [formError, setFormErr] = React.useState(INITIAL_USER);
@@ -41,10 +41,6 @@ export default function Register() {
     setUser(prevState => ({ ...prevState, [name]: value }));
   };
 
-  //   const validateForm = (event: any) {
-
-  //   }
-
   const handleSubmit = async (event: any) => {
     // @ts-ignore
     event.preventDefault();
@@ -54,15 +50,12 @@ export default function Register() {
       const url = `${baseUrl}/auth/signup`;
       const payload = { ...user };
       const response = await axios.post(url, payload);
-      console.log(response);
 
       cookie.set("token", response.data.token);
-      alertify.success(response['data']['message']);
+      alertify.success(response["data"]["message"]);
       setRedirect(true);
     } catch (e) {
-      //   setError(e);
       alertify.error(e.response.data.message);
-      //   console.log();
       console.error(e);
     }
   };
@@ -73,7 +66,7 @@ export default function Register() {
         <Redirect to="/" />
       ) : (
         <div className="col-md-5">
-          <h3 className="mb-4">Login</h3>
+          <h3 className="mb-4">Register</h3>
           <form onSubmit={handleSubmit}>
             <div className="form-group">
               <input
@@ -129,4 +122,6 @@ export default function Register() {
       )}
     </>
   );
-}
+};
+
+export default Register;
