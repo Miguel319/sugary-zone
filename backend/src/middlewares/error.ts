@@ -1,4 +1,5 @@
 import ErrorResponse from "../helpers/errorResponse";
+import { Request, Response } from "express";
 
 const errorHandler = (err: Error, req: Request, res: Response, next: any) => {
   let error = { ...err };
@@ -14,7 +15,7 @@ const errorHandler = (err: Error, req: Request, res: Response, next: any) => {
     err.name === "CastError"
   ) {
     manageMongooseErr(req, res, title, msg, error, err);
-  } 
+  }
 };
 
 const manageMongooseErr = (
@@ -34,10 +35,7 @@ const manageMongooseErr = (
       ? "Required fields"
       : "Validation Error";
     console.log(err.message);
-    msg = err.message
-      .split(" ")
-      .slice(4)
-      .join(" ");
+    msg = err.message.split(" ").slice(4).join(" ");
     error = new ErrorResponse(title, msg, 400);
   }
 
@@ -70,13 +68,11 @@ const manageMongooseErr = (
   return sendError(res, error);
 };
 
-
-const sendError = (res: Response, error: Error) => {
-  // @ts-ignore
-  return res.status(error.statusCode || 500).json({
+const sendError = (res: Response, error: any) => {
+  return res.status(error.status || 500).json({
     success: false,
     title: error["title"],
-    message: error.message || "Server Error"
+    message: error.message || "Server Error",
   });
 };
 

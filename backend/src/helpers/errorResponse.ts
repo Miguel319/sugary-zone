@@ -7,4 +7,8 @@ export default class ErrorResponse extends Error {
     this.title = title;
     this.statusCode = statusCode;
   }
+
+  getTitle = (): string => this.title;
+
+  getStatusCode = (): number => this.statusCode;
 }
