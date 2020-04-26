@@ -1,18 +1,24 @@
-const { Router } = require("express");
-const router = Router();
-const {
+import express from "express";
+const { Router } = express;
+const cakeRouter = Router();
+
+import {
   createCake,
   getCake,
   getCakes,
   updateCake,
-  deleteCake
-} = require("../controllers/cake");
+  deleteCake,
+} from "../controllers/cake";
 
-// Cake routes
-router.get("/", getCakes);
-router.get("/:id", getCake);
-router.post("/add", createCake);
-router.put("/:id", updateCake);
-router.delete("/:id", deleteCake);
+cakeRouter
+  .route("")
+  .get(getCakes as any)
+  .post(createCake as any);
 
-module.exports = router;
+cakeRouter
+  .route("/:id")
+  .get(getCake as any)
+  .put(updateCake as any)
+  .delete(deleteCake as any);
+
+export default cakeRouter;

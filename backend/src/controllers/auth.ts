@@ -2,12 +2,12 @@ import User from "../models/user";
 import asyncHandler from "../middlewares/asyncHandler";
 import ErrorResponse from "../helpers/errorResponse";
 import variables from '../../variables';
+import { Response, Request } from 'express';
 
 const { JWT_EXPIRE } = variables;
 
-exports.signup = asyncHandler(
+export const signup = asyncHandler(
   async (req: Request, res: Response, next: any) => {
-    // @ts-ignore
     const { username, email, password, passwordConfirmation } = req.body;
 
     const tempUser = { username, email, password, passwordConfirmation };
@@ -24,7 +24,6 @@ exports.signup = asyncHandler(
     // @ts-ignore
     const token = user.getSignedJWTToken();
     
-    // @ts-ignore
     res.status(200)
       .json({ success: true, message: "User created successfully!", token });
   }
@@ -48,14 +47,12 @@ const manageAuthErr = (
       error = new ErrorResponse(title, msg, 400);
   }
 
-  // @ts-ignore
   if (confirmation && confirmation !== req.body.password) {
     err = true;
     title = "Passwords don't match";
     msg = "The password must be the same as the confirmation.";
     error = new ErrorResponse(title, msg, 400);
   }
-  // @ts-ignore
   if (req.body.username && req.body.username.length < 3) {
       err = true;
       title = "The username is too short";
@@ -63,7 +60,6 @@ const manageAuthErr = (
       error = new ErrorResponse(title, msg, 400);
   }
 
-  // @ts-ignore
   if (req.body.username && req.body.username.length > 15) {
     err = true;
     title = "The username is too long";
@@ -71,7 +67,6 @@ const manageAuthErr = (
     error = new ErrorResponse(title, msg, 400);
   }
 
-  // @ts-ignore
   if (req.body.password && req.body.passwordConfirmation && req.body.password.length < 5
   ) {
     err = true;
@@ -80,7 +75,6 @@ const manageAuthErr = (
     error = new ErrorResponse(title, msg, 400);
   }
 
-  // @ts-ignore
   if (req.body.password && req.body.passwordConfirmation && req.body.password.length > 25
   ) {
     err = true;
@@ -89,28 +83,18 @@ const manageAuthErr = (
     error = new ErrorResponse(title, msg, 400);
   }
 
-  // @ts-ignore
-  return res.status(error.statusCode || 500).json({
+  return res.status(error.getStatusCode() || 500).json({
     success: false,
     title: error["title"],
     message: error.message || "Server Error"
   });
 };
 
-
-const sendError = (res: Response, error: Error) => {
-  // @ts-ignore
-  
-};
-
-
-exports.signin = asyncHandler(
+export const signin = asyncHandler(
   async (req: Request, res: Response, next: any) => {
-    // @ts-ignore
     const { email, password } = req.body;
 
     if (!email || !password) {
-      // @ts-ignore
       return next(
         new ErrorResponse(
           "Missing Data",
@@ -132,11 +116,9 @@ exports.signin = asyncHandler(
       );
     }
 
-    // @ts-ignore
-    const isPasswordValid = await user.matchPassword(password);
+    const isPasswordValid = await (user as any).matchPassword(password);
 
     if (!isPasswordValid) {
-      // @ts-ignore
       return res.status(401).json({
         success: false,
         title: "Invalid credentials",
@@ -161,7 +143,6 @@ const sendToken = (user: any, statusCode: number, message: string, res: Response
 
   const { username } = user;
     
-  // @ts-ignore
   res.status(200).cookie("token", token, options)
     .json({
       success: true,

@@ -7,7 +7,7 @@ const main = async () => {
 
   app.use(errorHandler);
 
-  await app.listen(app.get("port"));
+  app.listen(app.get("port"));
   console.log("Listening");
 };
 

@@ -1,9 +1,9 @@
 import Cake from "../models/cake";
 import asyncHandler from "../middlewares/asyncHandler";
+import { Request, Response } from 'express';
 
-exports.createCake = asyncHandler(
+export const createCake = asyncHandler(
   async (req: Request, res: Response, next: any) => {
-    // @ts-ignore
     const { title, prepTime, directions, ingredients, imgUrl } = req.body;
 
     await new Cake({
@@ -14,35 +14,30 @@ exports.createCake = asyncHandler(
       imgUrl
     }).save();
 
-    // @ts-ignore
     res.status(201).json({
       message: "Cake recipe created successfully!"
     });
   }
 );
 
-exports.getCakes = asyncHandler(
+export const getCakes = asyncHandler(
   async (req: Request, res: Response, next: any) => {
     const cakes = await Cake.find({});
-    // @ts-ignore
     res.status(200).json({ cakes });
   }
 );
 
-exports.getCake = asyncHandler(async (req: Request, res: Response) => {
-  // @ts-ignore
+export const getCake = asyncHandler(async (req: Request, res: Response) => {
   const { id } = req.params;
   const cakeFromId = await Cake.findOne({ _id: id });
 
-  // @ts-ignore
   res.status(200).json(cakeFromId);
 });
 
-exports.updateCake = asyncHandler(
+export const updateCake = asyncHandler(
   async (req: Request, res: Response, next: any) => {
-    // @ts-ignore
     const { title, prepTime, directions, ingredients, imgUrl } = req.body;
-    const { id } = req["params"];
+    const { id } = req.params;
 
     await Cake.updateOne(
       { _id: id },
@@ -55,21 +50,18 @@ exports.updateCake = asyncHandler(
       }
     );
 
-    // @ts-ignore
     res.status(200).json({
       message: "Cake recipe updated successfully!"
     });
   }
 );
 
-exports.deleteCake = asyncHandler(
+export const deleteCake = asyncHandler(
   async (req: Request, res: Response, next: any) => {
-    // @ts-ignore
-    const { id } = req["params"];
+    const { id } = req.params;
 
     await Cake.findOneAndDelete({ _id: id });
 
-    // @ts-ignore
     res.status(200).json({
       message: "Cake recipe deleted successfully!"
     });
