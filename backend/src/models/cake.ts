@@ -1,37 +1,37 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
-// @ts-ignore
-const CakeSchema = new mongoose.Schema(
+const CakeSchema = new Schema(
   {
     title: {
       type: String,
       required: [true, "The title is mandatory."],
-      unique: true
+      unique: true,
     },
     prepTime: {
       type: String,
-      required: [true, "The time it takes to prepare the cake is mandatory."]
+      required: [true, "The time it takes to prepare the cake is mandatory."],
     },
     ingredients: [
       {
         quantity: {
           type: String,
-          required: [true, "You must specify the ingredient's type."]
+          required: [true, "You must specify the ingredient's type."],
         },
         name: {
           type: String,
-          required: [true, "You must specify the ingredient' name."]
-        }
-      }
+          required: [true, "You must specify the ingredient' name."],
+        },
+      },
     ],
+    user: { type: Schema.Types.ObjectId, ref: "User" },
     directions: {
       type: String,
-      required: [true, "The directions field is mandatory."]
+      required: [true, "The directions field is mandatory."],
     },
-    imgUrl: String
+    imgUrl: String,
   },
   {
-    timestamps: true
+    timestamps: true,
   }
 );
 

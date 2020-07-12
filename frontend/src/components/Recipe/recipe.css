@@ -1,0 +1,76 @@
+.recipe-c {
+  /* width: 100vh; */
+  display: flex;
+  align-items: center;
+  overflow: hidden !important;
+}
+
+.card {
+  display: grid;
+  grid-template-columns: 300px;
+  grid-template-rows: 210px 210px 80px;
+  grid-template-areas: "image" "text" "facts";
+  border-radius: 18px;
+  background: white;
+  box-shadow: 5px 5px 15 px rgba(0, 0, 0, 0.9);
+  text-align: center;
+}
+
+.card-image {
+  grid-area: image;
+  background: url("https://res.cloudinary.com/dvoo3wu0v/image/upload/v1587938813/cake_w5ggjk.jpg");
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  background-size: cover;
+}
+
+.card-text {
+  grid-area: text;
+  margin: 20px;
+}
+
+.card-text .date {
+  color: rgba(46, 103, 141, 0.89);
+  font-size: 15px;
+  font-weight: 300;
+}
+
+.card-text p {
+  color: grey;
+  font-size: 15px;
+  font-weight: 300;
+}
+
+.card-text h2 {
+  top: 0;
+  font-size: 28px;
+}
+
+.card-facts {
+  grid-area: facts;
+  display: grid;
+  grid-template-rows: 1fr;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  background: rgb(207, 35, 35);
+}
+
+.card-facts .fact {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  color: #fafafa;
+  padding: 10px;
+}
+
+.card-facts .prep-time {
+  font-size: 16px;
+  font-weight: 300;
+  text-transform: uppercase;
+}
+
+.card-facts .value {
+  font-size: 22px;
+  font-weight: 500;
+}
