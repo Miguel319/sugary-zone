@@ -1,11 +1,17 @@
-import React, { FC, FormEvent, CSSProperties, useState } from "react";
+import React, {
+  FC,
+  FormEvent,
+  CSSProperties,
+  useState,
+  ChangeEvent,
+} from "react";
 import Recipe from "../../models/recipe";
 import Ingredient from "../../models/ingredient";
 import axios from "axios";
 import { Redirect } from "react-router-dom";
 import { Toast } from "../../utils/toast";
 
-const INITIAL_RECIPE = {
+const INITIAL_RECIPE: Recipe = {
   title: "",
   prepTime: "",
   ingredients: [],
@@ -13,7 +19,7 @@ const INITIAL_RECIPE = {
   imgUrl: "",
 };
 
-const INITIAL_INGREDIENT = {
+const INITIAL_INGREDIENT: Ingredient = {
   quantity: "",
   name: "",
 };
@@ -41,7 +47,9 @@ const RecipeCreate: FC = () => {
     setIngredient(INITIAL_INGREDIENT);
   };
 
-  const handleRecipeSubmit = async (event: any): Promise<any> => {
+  const handleRecipeSubmit = async (
+    event: ChangeEvent<HTMLFormElement>
+  ): Promise<any> => {
     event.preventDefault();
 
     // recipe.ingredients = ingredients;
@@ -105,99 +113,101 @@ const RecipeCreate: FC = () => {
   };
 
   return (
-    <div className="row">
-      {success && <Redirect to="/"></Redirect>}
-      <div style={ingredientStyles} className="col-sm-5">
-        <h5 style={titleStyles}>Ingredients</h5>
+    <div className="mt-3 container">
+      <div className="row ">
+        {success && <Redirect to="/"></Redirect>}
+        <div style={ingredientStyles} className="col-sm-5">
+          <h5 style={titleStyles}>Ingredients</h5>
 
-        <form onSubmit={handleIngredientSubmit}>
-          <div className="form-row">
-            <div className="col-sm-6 form-group">
-              <label htmlFor="ingredient">Ingredient</label>
+          <form onSubmit={handleIngredientSubmit}>
+            <div className="form-row">
+              <div className="col-sm-6 form-group">
+                <label htmlFor="ingredient">Ingredient</label>
+                <input
+                  placeholder="Ingredient's name"
+                  name="name"
+                  value={ingredient.name}
+                  className="form-control"
+                  onChange={handleIngredientChange}
+                />
+              </div>
+              <div className="col-sm-4 form-group">
+                <label htmlFor="quantity">Quantity</label>
+                <input
+                  placeholder="Quantity"
+                  value={ingredient.quantity}
+                  name="quantity"
+                  className="form-control"
+                  onChange={handleIngredientChange}
+                />
+              </div>
+              <button
+                style={addBtnStyles}
+                disabled={ingredientDisabled}
+                className="btn btn-success"
+                type="submit"
+              >
+                <i className="fas fa-plus"></i>
+              </button>
+            </div>
+          </form>
+
+          <ul className="mt-5">
+            {ingredients.map((v, i) => (
+              <li key={i}>{`${v.name} - ${v.quantity}`}</li>
+            ))}
+          </ul>
+        </div>
+        <div style={recipeStyles} className="col-sm-6">
+          <h4 style={titleStyles}>Recipe</h4>
+
+          <form onSubmit={handleRecipeSubmit}>
+            <div className="form-group">
+              <label htmlFor="title">Title</label>
               <input
-                placeholder="Ingredient's name"
-                name="name"
-                value={ingredient.name}
+                placeholder="Title"
+                name="title"
+                value={recipe.title}
                 className="form-control"
-                onChange={handleIngredientChange}
+                onChange={handleRecipeChange}
               />
             </div>
-            <div className="col-sm-4 form-group">
-              <label htmlFor="quantity">Quantity</label>
-              <input
-                placeholder="Quantity"
-                value={ingredient.quantity}
-                name="quantity"
+            <div className="form-group">
+              <label htmlFor="directions">Directions</label>
+              <textarea
+                placeholder="Directions"
+                value={recipe.directions}
+                name="directions"
                 className="form-control"
-                onChange={handleIngredientChange}
+                onChange={handleRecipeChange}
+                rows={4}
               />
             </div>
-            <button
-              style={addBtnStyles}
-              disabled={ingredientDisabled}
-              className="btn btn-success"
-              type="submit"
-            >
-              <i className="fas fa-plus"></i>
+            <div className="form-group">
+              <label htmlFor="imgUrl">Img URL</label>
+              <input
+                placeholder="Image URL Path"
+                value={recipe.imgUrl}
+                name="imgUrl"
+                className="form-control"
+                onChange={handleRecipeChange}
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="prepTime">Prep Time</label>
+              <input
+                placeholder="Estimated prep time"
+                value={recipe.prepTime}
+                name="prepTime"
+                className="form-control"
+                onChange={handleRecipeChange}
+              />
+            </div>
+            <button type="submit" className="btn btn-success btn-block">
+              <i style={fasStyles} className="fas fa-database"></i>Submit
             </button>
-          </div>
-        </form>
-
-        <ul className="mt-5">
-          {ingredients.map((v, i) => (
-            <li key={i}>{`${v.name} - ${v.quantity}`}</li>
-          ))}
-        </ul>
-      </div>
-      <div style={recipeStyles} className="col-sm-6">
-        <h4 style={titleStyles}>Recipe</h4>
-
-        <form onSubmit={handleRecipeSubmit}>
-          <div className="form-group">
-            <label htmlFor="title">Title</label>
-            <input
-              placeholder="Title"
-              name="title"
-              value={recipe.title}
-              className="form-control"
-              onChange={handleRecipeChange}
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="directions">Directions</label>
-            <textarea
-              placeholder="Directions"
-              value={recipe.directions}
-              name="directions"
-              className="form-control"
-              onChange={handleRecipeChange}
-              rows={4}
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="imgUrl">Img URL</label>
-            <input
-              placeholder="Image URL Path"
-              value={recipe.imgUrl}
-              name="imgUrl"
-              className="form-control"
-              onChange={handleRecipeChange}
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="prepTime">Prep Time</label>
-            <input
-              placeholder="Estimated prep time"
-              value={recipe.prepTime}
-              name="prepTime"
-              className="form-control"
-              onChange={handleRecipeChange}
-            />
-          </div>
-          <button type="submit" className="btn btn-success btn-block">
-            <i style={fasStyles} className="fas fa-database"></i>Submit
-          </button>
-        </form>
+          </form>
+        </div>
       </div>
     </div>
   );
