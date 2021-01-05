@@ -11,7 +11,7 @@
     "@types/react": "^16.9.17",
     "@types/react-dom": "^16.9.4",
     "alertifyjs": "^1.13.1",
-    "axios": "^0.19.1",
+    "axios": "^0.21.1",
     "bootstrap": "^4.4.1",
     "js-cookie": "^2.2.1",
     "react": "^16.12.0",
